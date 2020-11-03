@@ -1,0 +1,7 @@
+{
+    "programmer": "AVRISP mkII",
+    "board": "arduino:avr:uno",
+    "port": "COM3",
+    "sketch": "sketch_oct06a_traffic_lights.ino",
+    "output": "../build"
+}
