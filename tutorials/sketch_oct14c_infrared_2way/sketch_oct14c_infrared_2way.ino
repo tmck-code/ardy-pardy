@@ -14,13 +14,9 @@ void setup() {
 void loop() {
   if (irrecv.decode(&results)) {
       Serial.println("Received: " + String(results.value, HEX));
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(2000);
-      irsend.sendNEC(results.value, 32);
-      Serial.println("Sent: " + String(results.value, HEX));
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(200);
-      irrecv.enableIRIn(); // Start the receiver
+      // irsend.sendNEC(results.value, 32);
+      // delay(1000);
+      // irrecv.enableIRIn(); // Start the receiver
       irrecv.resume(); // Receive the next value
   }
 }
