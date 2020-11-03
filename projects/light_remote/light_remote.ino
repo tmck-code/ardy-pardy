@@ -46,10 +46,10 @@ void loop() {
   if (irrecv.decode(&results)) {
     if (results.value != 0xffffffff) {
       Serial.println(String(results.value, HEX) + " -> " + findOp(results.value));
-      // irsend.sendNEC(results.value, 32);
-      // Serial.println("Sent: " + String(results.value, HEX));
+      irsend.sendNEC(results.value, 32);
+      irrecv.enableIRIn(); // Start the receiver
+      Serial.println("Sent: " + String(results.value, HEX));
     }
-    // irrecv.enableIRIn(); // Start the receiver
     irrecv.resume(); // Receive the next value
   }
 }
