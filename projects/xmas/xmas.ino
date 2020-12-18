@@ -6,7 +6,7 @@
 
 #define LED_PIN   13
 #define LED_COUNT 50
-#define SLEEP 250
+#define SLEEP     250
 int PIXEL_OFFSET = 0;
 
 #define WHITE  0
@@ -26,6 +26,7 @@ uint32_t COLOURS[] = {
 
 int N_COLOURS = sizeof(COLOURS)/sizeof(COLOURS[0]);
 uint32_t XMAS_DUO[2] = {RED, GREEN};
+uint32_t XMAS_TRIO[3] = {RED, GREEN, YELLOW};
 
 void setup() {
   Serial.begin(9600);
@@ -40,17 +41,21 @@ void setup() {
 void loop() {
   for (int i=0; i<N_COLOURS; i++) {
     colorWipe(COLOURS[i], SLEEP);
-    xmas(XMAS_DUO, sizeof(XMAS_DUO)/sizeof(XMAS_DUO[0]), YELLOW);
+    if (i % 2 == 0) {
+      xmas(XMAS_DUO, sizeof(XMAS_DUO)/sizeof(XMAS_DUO[0]), YELLOW);
+    } else {
+      xmas(XMAS_TRIO, sizeof(XMAS_TRIO)/sizeof(XMAS_TRIO[0]), WHITE);
+    }
   }
 }
 
 // Fill strip pixels one after another with a color, and delay in ms.
 // Strip is NOT cleared first; anything there will be covered pixel by pixel
 void colorWipe(uint32_t color, int wait) {
-  for(int i=0; i<strip.numPixels(); i++) { // For each pixel in strip...
-    strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
-    strip.show();                          //  Update strip to match
-    delay(wait);                           //  Pause for a moment
+  for(int i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, color);
+    strip.show();
+    delay(wait);
   }
 }
 
