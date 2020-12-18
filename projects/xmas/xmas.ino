@@ -10,18 +10,18 @@
 int PIXEL_OFFSET = 0;
 
 #define WHITE  0
-#define RED    1
-#define YELLOW 2
-#define GREEN  3
+#define YELLOW 1
+#define GREEN  2
+#define RED    3
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // Green, Yellow
 uint32_t COLOURS[] = {
   strip.Color(255, 255, 255),
-  strip.Color(255,   0, 0),
   strip.Color(255, 255, 0),
-  strip.Color(0,   255, 0)
+  strip.Color(0,   255, 0),
+  strip.Color(255,   0, 0)
 };
 
 int N_COLOURS = sizeof(COLOURS)/sizeof(COLOURS[0]);
@@ -39,7 +39,7 @@ void setup() {
 }
 
 void loop() {
-  for (int i=0; i<N_COLOURS; i++) {
+  for (int i=0; i<N_COLOURS-1; i++) {
     colorWipe(COLOURS[i], SLEEP);
     if (i % 2 == 0) {
       xmas(XMAS_DUO, sizeof(XMAS_DUO)/sizeof(XMAS_DUO[0]), YELLOW);
