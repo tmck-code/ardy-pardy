@@ -48,7 +48,7 @@ void loop() {
   for (int i=0; i<N_COLOURS; i++) {
     colorWipe(COLOURS[i], SLEEP);
     for (int j=1; j<N_COLOURS; j++) {
-      if (i % 2 == 0) {
+      if (j % 2 == 0) {
         uint32_t colours_duo[2] = {i, (i+j)%(sizeof(COLOURS)/sizeof(COLOURS[0]))};
         xmas(colours_duo, sizeof(colours_duo)/sizeof(colours_duo[0]), YELLOW);
       } else {
