@@ -4,7 +4,6 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
 #include <Adafruit_NeoPixel.h>
-#include <SerialPrintf.h>
 
 #define PIN 6
 #define WIDTH 16
@@ -28,18 +27,44 @@ void setup() {
   matrix.setBrightness(5);
 }
 
+void horizontal(int r, int g, int b, int delay_ms = 20) {
+  Serial.println(String(r)+","+String(g)+","+String(b)+",");
+  for (int y = 0; y<HEIGHT; y++) {
+    for (int x = 0; x<WIDTH; x++) {
+      matrix.drawPixel(x, y, matrix.Color(r, g, b));
+    }
+    matrix.show();
+    delay(delay_ms);
+  }
+}
+
+void solid(int r, int g, int b, int delay_ms = 20) {
+  Serial.println(String(r)+","+String(g)+","+String(b)+",");
+  for (int y = 0; y<HEIGHT; y++) {
+    for (int x = 0; x<WIDTH; x++) {
+      matrix.drawPixel(x, y, matrix.Color(r, g, b));
+    }
+  }
+  matrix.show();
+}
+
+void strip(int r, int g, int b, int xs, int width) {
+  Serial.println(String(r)+","+String(g)+","+String(b)+","+String(xs)+","+String(width));
+  for (int y = 0; y<HEIGHT; y++) {
+    for (int x = 0; x<width; x++) {
+      matrix.drawPixel(x+xs, y, matrix.Color(r, g, b));
+    }
+  }
+  matrix.show();
+}
+
+
 void loop() {
-  for (int r = 50; r<255; r+=10) {
-    for (int g = 50; g<255; g+=10) {
-      for (int b = 50; b<255; b+=10) {
-        serial_printf(Serial, "r: %d, g: %d, b: %d\n", r, g, b);
-        for (int y = 0; y<HEIGHT; y++) {
-          for (int x = 0; x<WIDTH; x++) {
-            matrix.drawPixel(x, y, matrix.Color(r, g, b));
-          }
-          matrix.show();
-          delay(20);
-        }
+  for (int r = 110; r<255; r+=10) {
+    for (int g = 110; g<255; g+=10) {
+      for (int b = 110; b<255; b+=10) {
+        strip(r, g, b, 3, 2);
+        delay(200);
       }
     }
   }
