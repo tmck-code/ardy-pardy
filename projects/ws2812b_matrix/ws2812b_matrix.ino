@@ -133,16 +133,7 @@ void setup() {
 }
 
 void loop() {
-  // readRGB();
   setColour(100, 0, 0);
-  makeColorGradient(2.3,.3,.3,0,2,4,192,64,256);
-  delay(SLEEP);
-
-  setColour(100, 0, 0);
-  makeColorGradient(.1,.2,.3,0,2,4,192,64,256);
-  delay(SLEEP);
-
-  setColour(100, 0, 0);
-  makeColorGradient(1.1,.2,.1,0,2,4,192,64,256);
+  makeColorGradient(.05,.1,.15,0,2,4,192,64,256);
   delay(SLEEP);
 }
