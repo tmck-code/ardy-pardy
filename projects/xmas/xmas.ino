@@ -15,8 +15,9 @@ int PIXEL_OFFSET = 0;
 #define RED     3
 #define PINK    4
 #define CYAN    5
-#define MAGENTA 6
-#define BLUE    7
+#define UNKNOWN 6
+#define MAGENTA 7
+#define BLUE    8
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -29,6 +30,7 @@ uint32_t COLOURS[][3] = {
   {255,   0, 0},
   {0, 255, 255},
   {255, 0, 255},
+  {100, 0, 255},
   {0, 255, 100},
   {0, 0, 255},
 };
@@ -66,9 +68,9 @@ void grad_rev(uint8_t red1, uint8_t green1, uint8_t blue1, uint8_t red2, uint8_t
 
 // Fill strip pixels one after another with a color, and delay in ms.
 // Strip is NOT cleared first; anything there will be covered pixel by pixel
-void colorWipe(uint32_t color, int wait) {
+void colorWipe(uint32_t r, uint32_t g, uint32_t b, int wait) {
   for(int i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, color);
+    strip.setPixelColor(i, strip.Color(r,g,b));
     strip.show();
     delay(wait);
   }
@@ -102,7 +104,7 @@ void loop() {
   for (int i=0; i<N_COLOURS; i++) {
     grad_rev(COLOURS[3][0], COLOURS[3][1], COLOURS[3][2], COLOURS[7][0], COLOURS[7][1], COLOURS[7][2]);
     grad(COLOURS[i][0], COLOURS[i][1], COLOURS[i][2], COLOURS[i+1][0], COLOURS[i+1][1], COLOURS[i+1][2]);
-    colorWipe(COLOURS[i], SLEEP);
+    colorWipe(COLOURS[i][0], COLOURS[i][1], COLOURS[i][2], SLEEP);
     for (int j=1; j<N_COLOURS; j++) {
       if (j % 2 == 0) {
         uint32_t colours_duo[2] = {i, (i+j)%(sizeof(COLOURS))};
