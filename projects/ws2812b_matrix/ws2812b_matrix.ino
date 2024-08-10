@@ -47,7 +47,7 @@ void makeColorGradient(float frequency1, float frequency2, float frequency3,
       int g = sin(frequency2*i + phase2) * width + center;
       int b = sin(frequency3*i + phase3) * width + center;
       Serial.println(String(r)+","+String(g)+","+String(b));
-      // setColour(r,g,b);
+
       setPixelByIndex(i, r, g, b);
 
       if (i % 2 == 0) {
@@ -123,7 +123,7 @@ void strip(int r, int g, int b, int xs, int width) {
   matrix.show();
 }
 
-int SLEEP = 3000;
+int SLEEP = 10000;
 
 void setup() {
   Serial.begin(9600);
