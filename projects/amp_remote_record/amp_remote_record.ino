@@ -27,9 +27,6 @@ void setup() {
     Serial.print(F("Send IR signals at pin "));
     Serial.println(IR_SEND_PIN);
     delay(5000);
-
-    Serial.println("Init energy saving");
-    initEnergySaving();
 }
 
 #define IR_UP 0x40
@@ -47,13 +44,13 @@ void selectEnergySavingOption(int option) {
   } else if (current_energy_saving_option < option) {
     for (int i = current_energy_saving_option; i < option; i++) {
       Serial.println("pressing down, i: " + String(i));
-      IrSender.sendNEC(0x4, IR_DOWN, 0);
+      IrSender.sendNEC(0x4, IR_DOWN, 1);
       delay(500);
     }
   } else {
     for (int i = current_energy_saving_option; i > option; i--) {
       Serial.println("pressing up, i: " + String(i));
-      IrSender.sendNEC(0x4, IR_UP, 0);
+      IrSender.sendNEC(0x4, IR_UP, 1);
       delay(500);
     }
   }
@@ -61,14 +58,14 @@ void selectEnergySavingOption(int option) {
 
 void initEnergySaving() {
   Serial.println("opening energy saving options");
-  IrSender.sendNEC(0x4, IR_OPEN_ENERGY_SAVING, 0);
+  IrSender.sendNEC(0x4, IR_OPEN_ENERGY_SAVING, 2);
   delay(500);
   // cycle up to the first option and beyond, to the "close window" button.
   // ensure that the "close window" button is definitely selected.
   // 1. get the length of the energy_saving_options array
   for (int i = 0; i < NRG_N_OPTIONS+1; i++) {
     Serial.println("pressing up, i: " + String(i));
-    IrSender.sendNEC(0x4, IR_UP, 0);
+    IrSender.sendNEC(0x4, IR_UP, 1);
     delay(500);
   }
   // at this point, the menu index is _actually_ at -1!
@@ -80,22 +77,31 @@ void initEnergySaving() {
 }
 
 void printIRSignal() {
-  IrReceiver.initDecodedIRData(); // is required, if we do not call decode();
+  // IrReceiver.initDecodedIRData(); // is required, if we do not call decode();
   IrReceiver.decode();
-  // IrReceiver.decodeHash();
-  Serial.println(IrReceiver.decodedIRData.address, HEX);
-  Serial.println(IrReceiver.decodedIRData.command, HEX);
-  Serial.println(getProtocolString(IrReceiver.decodedIRData.protocol));
-  Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
+  // Serial.println(IrReceiver.decodedIRData.address, HEX);
+  // Serial.println(IrReceiver.decodedIRData.command, HEX);
+  // Serial.println(getProtocolString(IrReceiver.decodedIRData.protocol));
+  // Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX);
 
   // We have an unknown protocol here, print extended info
-  IrReceiver.printIRResultRawFormatted(&Serial, true);
+  // IrReceiver.printIRResultRawFormatted(&Serial, true);
+
   IrReceiver.printIRResultShort(&Serial);
 }
 
 void loop() {
   if (IrReceiver.available()) {
     printIRSignal();
+    delay(250);
+
+    Serial.print("resending same signal... ");
+    for (int i = 0; i < 5; i++) {
+      IrSender.sendNEC(IrReceiver.decodedIRData.address, IrReceiver.decodedIRData.command, 0);
+      delay(500);
+    }
+    Serial.println("finished same signal");
+    initEnergySaving();
 
     delay(1000);
     IrReceiver.resume(); // Early enable receiving of the next IR frame

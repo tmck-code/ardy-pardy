@@ -1,5 +1,21 @@
 const int sensorPin = A0;
-const float baselineTemp = 20.0;
+float baselineTemp = 20.0;
+
+float readTemp(int pinNumber) {
+  int adc = analogRead(pinNumber);
+  Serial.print("Sensor Value: ");
+  Serial.print(adc);
+
+  float voltage = (adc/1024.0) * 5.0;
+  Serial.print(", Volts: ");
+  Serial.print(voltage);
+
+  float temp = (voltage - .5) * 100;
+  Serial.print(", degrees C: ");
+  Serial.println(temp);
+
+  return temp;
+}
 
 void setup() {
   // initialize serial communication:
@@ -10,24 +26,14 @@ void setup() {
     delay(100);
     digitalWrite(pinNumber, LOW);
   }
+
+  baselineTemp = readTemp(sensorPin);
+  Serial.print("baseline temp is: ");
+  Serial.println(baselineTemp);
 }
 
 void loop() {
-  // take a reading:
-  Serial.print("Reading Sensor");
-  int sensorVal = analogRead(sensorPin);
-  Serial.print("Sensor Value: ");
-  Serial.print(sensorVal);
-
-  // convert the ADC reading to voltage
-  float voltage = (sensorVal/1024.0) * 5.0;
-  Serial.print(", Volts: ");
-  Serial.print(voltage);
-
-  // convert the voltage to temperature in degrees C
-  float temperature = (voltage - .5) * 100;
-  Serial.print(", degrees C: ");
-  Serial.println(temperature);
+  float temperature = readTemp(sensorPin);
 
   if (temperature >= (baselineTemp+2)) {
     // if the temperature is at or above 22 degrees C, turn on the third LED:
